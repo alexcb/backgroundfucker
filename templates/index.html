@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Change Alex's Background as a Service</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function(){
+            namespace = '/test'; // change to an empty string to use the global namespace
+
+            // the socket.io documentation recommends sending an explicit package upon connection
+            // this is specially important when using the global namespace
+            var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+
+            // event handler for server sent data
+            // the data is displayed in the "Received" section of the page
+            socket.on('backgroundchange', function(msg) {
+                $('#current_background').attr('src', msg.background);
+            });
+
+        });
+    </script>
+
+
+
+</head>
+<body>
+
+    <h1>Fuck with Alex's background webservice</h1>
+    <form method="post" action="/desktop">
+       <label for="background">new background URL:</label>
+       <input type="text" name="background" /><br />
+       <input type="submit" />
+    </form>
+
+	<a href="/archive/0">Archived backgrounds</a>
+    <br>
+    Currently it's set to<br>
+	<img id="current_background" src="{{ background_url }}"><br>
+	<a href="/background">View full screen</a>
+
+</body>
+</html>
+
